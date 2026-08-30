@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.apexplayer.pro.realme"
+    android:versionCode="1"
+    android:versionName="3.5.0">
+
+    <!-- Safe permissions: Local Storage Access only for media files -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="ApexPlayer Pro"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:hardwareAccelerated="true"
+        android:theme="@android:style/Theme.Material.NoTitleBar.Fullscreen">
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true">
+            
+            <!-- App Launcher Action -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- DEFAULT VIDEO PLAYER INTENT FILTER FOR REALME & ANDROID -->
+            <!-- This allows Realme UI to set ApexPlayer Pro as the Default Video Player -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="video/mp4" />
+                <data android:mimeType="video/mkv" />
+                <data android:mimeType="video/webm" />
+                <data android:mimeType="video/3gp" />
+                <data android:mimeType="video/avi" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
