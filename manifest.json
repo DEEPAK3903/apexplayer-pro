@@ -1,0 +1,19 @@
+{
+  "short_name": "ApexPlayer Pro",
+  "name": "ApexPlayer Pro - Ultra Secure Video Player for Realme & Android",
+  "icons": [
+    {
+      "src": "icon.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#0b0d14",
+  "theme_color": "#00f2fe",
+  "display": "standalone",
+  "orientation": "any",
+  "categories": ["entertainment", "utilities", "video"],
+  "description": "High-performance, secure mobile video player tailored for Realme & Android 12+ devices with gesture controls, equalizer, subtitles, and zero data tracking."
+}
