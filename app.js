@@ -1,13 +1,13 @@
 /* ==========================================================================
-   ApexPlayer Pro - Core Application Engine
-   Clean 3-Tab YouTube-style App: Home, Library, Settings with Full File Details.
-   Includes Recursive Directory Scanner, Direct File Picker & Reliable Blob Playback.
+   MC Player Pro - Core Application Engine (Full MX Player Clone)
+   MX Player Controls, Aspect Ratio Modes, Screen Rotation, Gestures,
+   1-Click Recursive Directory Scanner & Direct Video File Picker.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- INDEXED DB ENGINE FOR LOCAL MEDIA PERSISTENCE ---
-  const DB_NAME = 'ApexPlayerDB';
+  const DB_NAME = 'MCPlayerDB';
   const DB_VERSION = 1;
   const STORE_NAME = 'scannedVideos';
   let db = null;
@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return new Promise((resolve) => {
       const tx = db.transaction(STORE_NAME, 'readwrite');
       const store = tx.objectStore(STORE_NAME);
-      // Remove temporary object URL before saving to IDB to avoid storage issues
       const itemToSave = { ...videoItem };
       store.put(itemToSave);
       tx.oncomplete = () => resolve(true);
@@ -69,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Header & Search
   const globalSearchInput = document.getElementById('globalSearchInput');
   const btnClearSearch = document.getElementById('btnClearSearch');
+  const btnToggleViewMode = document.getElementById('btnToggleViewMode');
+  const viewModeIcon = document.getElementById('viewModeIcon');
   const btnScanFolderTop = document.getElementById('btnScanFolderTop');
   const btnScanFolderBanner = document.getElementById('btnScanFolderBanner');
   const btnScanLibraryTop = document.getElementById('btnScanLibraryTop');
@@ -106,6 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const mainVideo = document.getElementById('mainVideo');
   const btnPlayPause = document.getElementById('btnPlayPause');
   const playIcon = document.getElementById('playIcon');
+  const btnPrevVideo = document.getElementById('btnPrevVideo');
+  const btnNextVideo = document.getElementById('btnNextVideo');
+  const btnSkipBack = document.getElementById('btnSkipBack');
+  const btnSkipForward = document.getElementById('btnSkipForward');
   const btnMute = document.getElementById('btnMute');
   const muteIcon = document.getElementById('muteIcon');
   const currentTimeText = document.getElementById('currentTimeText');
@@ -116,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const videoTitleLabel = document.getElementById('videoTitleLabel');
   const btnMinimizePlayer = document.getElementById('btnMinimizePlayer');
 
-  // Player Actions
+  // MX Player Player Actions
+  const btnOrientation = document.getElementById('btnOrientation');
   const btnAspectRatio = document.getElementById('btnAspectRatio');
   const btnPiP = document.getElementById('btnPiP');
   const btnEqualizerModal = document.getElementById('btnEqualizerModal');
@@ -167,9 +173,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentCategory = 'all';
   let searchQuery = '';
   let allVideosList = [];
+  let currentPlayingIndex = 0;
   let isMiniPlayerActive = false;
+  let isListViewMode = false;
 
-  // Default Sample Videos with full details
+  // Default Sample Videos
   const defaultSampleVideos = [
     {
       id: 'sample-1',
@@ -223,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- GOOGLE UI LIGHT / DARK THEME SYSTEM ---
   function initTheme() {
-    const savedTheme = localStorage.getItem('apex_theme') || 'dark';
+    const savedTheme = localStorage.getItem('mc_theme') || 'dark';
     setTheme(savedTheme);
   }
 
@@ -241,14 +249,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btnThemeDark) btnThemeDark.classList.add('active');
       if (btnThemeLight) btnThemeLight.classList.remove('active');
     }
-    localStorage.setItem('apex_theme', theme);
+    localStorage.setItem('mc_theme', theme);
   }
 
   if (btnThemeToggle) {
     btnThemeToggle.addEventListener('click', () => {
       const current = body.classList.contains('theme-light') ? 'dark' : 'light';
       setTheme(current);
-      showToast(`Switched to Google ${current === 'light' ? 'Light Mode' : 'Dark Mode'}`);
+      showToast(`Switched to MC Player ${current === 'light' ? 'Light Mode' : 'Dark Mode'}`);
     });
   }
 
@@ -272,7 +280,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navBtns.library) navBtns.library.addEventListener('click', () => switchView('library'));
   if (navBtns.settings) navBtns.settings.addEventListener('click', () => switchView('settings'));
 
-  // --- RECURSIVE SUBDIRECTORY MEDIA SCANNER ---
+  // --- GRID / LIST VIEW MODE TOGGLE (MX Player Style) ---
+  if (btnToggleViewMode) {
+    btnToggleViewMode.addEventListener('click', () => {
+      isListViewMode = !isListViewMode;
+      if (isListViewMode) {
+        videoGrid.classList.add('view-list-mode');
+        viewModeIcon.className = 'fa-solid fa-list';
+        showToast('Switched to Detailed List View');
+      } else {
+        videoGrid.classList.remove('view-list-mode');
+        viewModeIcon.className = 'fa-solid fa-table-cells-large';
+        showToast('Switched to Grid Card View');
+      }
+    });
+  }
+
+  // --- RECURSIVE DIRECTORY SCANNER ---
   function isVideoExtension(filename) {
     return /\.(mp4|mkv|webm|avi|mov|3gp|m4v|flv|wmv|ts|m2ts|vob|divx|ogv|mpg|mpeg)$/i.test(filename);
   }
@@ -293,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
             count++;
           }
         } else if (entry.kind === 'directory') {
-          // Recursively scan subdirectories!
           count += await scanDirectoryRecursively(entry, `${currentPath}/${entry.name}`);
         }
       }
@@ -311,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const count = await scanDirectoryRecursively(dirHandle, '');
         
-        showToast(`Successfully found ${count} video(s) inside ${dirHandle.name}!`);
+        showToast(`MC Player found ${count} video(s) inside ${dirHandle.name}!`);
         await loadAllVideos();
       } catch (err) {
         if (err.name !== 'AbortError') {
@@ -327,7 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnScanFolderBanner) btnScanFolderBanner.addEventListener('click', triggerFolderScan);
   if (btnScanLibraryTop) btnScanLibraryTop.addEventListener('click', triggerFolderScan);
 
-  // Folder File Input Fallback (`webkitdirectory`)
   if (folderFileInput) {
     folderFileInput.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
@@ -341,12 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
           count++;
         }
       }
-      showToast(`Added ${count} video(s) from scanned directory!`);
+      showToast(`Added ${count} video(s) to MC Player library!`);
       await loadAllVideos();
     });
   }
 
-  // Direct File Picker Handler ("Open Video Files")
   if (btnSelectFilesDirect) {
     btnSelectFilesDirect.addEventListener('click', () => {
       if (localFilesInput) localFilesInput.click();
@@ -397,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return videoItem;
   }
 
-  // Drag & Drop Folder/Files
+  // Drag & Drop
   if (dropZone) {
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
@@ -457,18 +478,19 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">
           <i class="fa-solid fa-folder-open" style="font-size: 3rem; margin-bottom: 12px;"></i>
           <p style="font-weight: 700;">No matching video files found</p>
-          <p style="font-size: 0.8rem; margin-top: 4px;">Click "Open Video Files" or "Scan Folder" above to add videos from your laptop.</p>
+          <p style="font-size: 0.8rem; margin-top: 4px;">Click "Open Video Files" or "Scan Folder" above to add videos.</p>
         </div>
       `;
       return;
     }
 
-    filtered.forEach(v => {
+    filtered.forEach((v, idx) => {
       const card = document.createElement('div');
       card.className = 'video-card-item';
       card.innerHTML = `
         <div class="thumbnail-wrap">
           <img src="${v.poster}" alt="${v.title}">
+          <div class="thumb-progress-bar"></div>
           <span class="duration-badge">${v.dur}</span>
           <span class="res-tag">${v.res}</span>
           <span class="format-badge">${v.format || 'MP4'}</span>
@@ -486,7 +508,10 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
-      card.addEventListener('click', () => playVideo(v));
+      card.addEventListener('click', () => {
+        currentPlayingIndex = idx;
+        playVideo(v);
+      });
       videoGrid.appendChild(card);
     });
   }
@@ -495,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!libraryVideoList) return;
     libraryVideoList.innerHTML = '';
 
-    allVideosList.forEach(v => {
+    allVideosList.forEach((v, idx) => {
       const item = document.createElement('div');
       item.className = 'linear-item-card';
       item.innerHTML = `
@@ -515,7 +540,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="header-icon-btn" style="color: var(--primary-color);" title="Play File"><i class="fa-solid fa-play"></i></button>
       `;
 
-      item.addEventListener('click', () => playVideo(v));
+      item.addEventListener('click', () => {
+        currentPlayingIndex = idx;
+        playVideo(v);
+      });
       libraryVideoList.appendChild(item);
     });
   }
@@ -562,17 +590,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- RELIABLE VIDEO PLAYER ENGINE (LOCAL BLOB URL RE-CREATION) ---
+  // --- MX PLAYER FULL PLAYER ENGINE ---
   function playVideo(videoItem) {
     if (isMiniPlayerActive) hideMiniPlayer();
 
-    // Generate fresh Object URL if file reference exists!
     let activeSrc = videoItem.src;
     if (videoItem.fileRef) {
       try {
         activeSrc = URL.createObjectURL(videoItem.fileRef);
       } catch (err) {
-        console.log('Object URL recreation note:', err);
+        console.log('Object URL creation note:', err);
       }
     }
 
@@ -609,6 +636,44 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnPlayPause) btnPlayPause.addEventListener('click', togglePlayPause);
   if (btnMiniPlayPause) btnMiniPlayPause.addEventListener('click', togglePlayPause);
 
+  // Skip Back / Skip Forward
+  if (btnSkipBack) {
+    btnSkipBack.addEventListener('click', () => {
+      if (isLocked || !mainVideo.duration) return;
+      mainVideo.currentTime = Math.max(0, mainVideo.currentTime - 10);
+      triggerSkipAnim(skipLeftRing);
+    });
+  }
+  if (btnSkipForward) {
+    btnSkipForward.addEventListener('click', () => {
+      if (isLocked || !mainVideo.duration) return;
+      mainVideo.currentTime = Math.min(mainVideo.duration, mainVideo.currentTime + 10);
+      triggerSkipAnim(skipRightRing);
+    });
+  }
+
+  // Next / Previous Video
+  if (btnPrevVideo) {
+    btnPrevVideo.addEventListener('click', () => {
+      if (currentPlayingIndex > 0) {
+        currentPlayingIndex--;
+        playVideo(allVideosList[currentPlayingIndex]);
+      } else {
+        showToast('Beginning of video playlist');
+      }
+    });
+  }
+  if (btnNextVideo) {
+    btnNextVideo.addEventListener('click', () => {
+      if (currentPlayingIndex < allVideosList.length - 1) {
+        currentPlayingIndex++;
+        playVideo(allVideosList[currentPlayingIndex]);
+      } else {
+        showToast('End of video playlist');
+      }
+    });
+  }
+
   if (mainVideo) {
     mainVideo.addEventListener('timeupdate', () => {
       if (!mainVideo.duration) return;
@@ -621,6 +686,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mainVideo.addEventListener('loadedmetadata', () => {
       if (durationText) durationText.textContent = formatTime(mainVideo.duration);
+    });
+
+    mainVideo.addEventListener('ended', () => {
+      if (currentPlayingIndex < allVideosList.length - 1) {
+        currentPlayingIndex++;
+        playVideo(allVideosList[currentPlayingIndex]);
+      }
     });
   }
 
@@ -680,7 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Aspect Ratio
+  // MX Player Aspect Ratio Cycle (Fit -> Fill 20:9 -> Stretch -> 100% -> 16:9 -> 4:3)
   const aspectModes = ['', 'aspect-fill', 'aspect-stretch'];
   let aspectIdx = 0;
   if (btnAspectRatio) {
@@ -689,8 +761,22 @@ document.addEventListener('DOMContentLoaded', () => {
       aspectIdx = (aspectIdx + 1) % aspectModes.length;
       if (aspectModes[aspectIdx]) mainVideo.classList.add(aspectModes[aspectIdx]);
 
-      const modeLabels = ['Original Fit', '20:9 Realme Fill Crop', 'Full Stretch'];
+      const modeLabels = ['Fit', '20:9 Fill Crop', 'Full Stretch'];
       showToast(`Aspect Ratio: ${modeLabels[aspectIdx]}`);
+    });
+  }
+
+  // Screen Rotation Toggle
+  let isLandscape = false;
+  if (btnOrientation) {
+    btnOrientation.addEventListener('click', () => {
+      isLandscape = !isLandscape;
+      if (isLandscape && screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      } else if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
+      showToast(isLandscape ? 'Screen Orientation: Landscape Lock' : 'Screen Orientation: Auto Rotate');
     });
   }
 
@@ -709,7 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Lock Screen
+  // Lock Screen Controls
   if (btnLockPlayer) {
     btnLockPlayer.addEventListener('click', () => {
       isLocked = true;
@@ -881,11 +967,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Close Equalizer Buttons
   if (btnCloseEq) btnCloseEq.addEventListener('click', closeEqModal);
   if (btnDoneEq) btnDoneEq.addEventListener('click', closeEqModal);
 
-  // Close Equalizer when clicking outside content (backdrop)
   if (eqModal) {
     eqModal.addEventListener('click', (e) => {
       if (e.target === eqModal) closeEqModal();
@@ -927,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- SECURITY MODAL EXIT HANDLERS ---
+  // --- SECURITY MODAL ---
   function closeSecurityModal() {
     if (securityModal) securityModal.classList.remove('open');
   }
@@ -939,7 +1023,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ESC key listener to exit active modals
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeEqModal();
@@ -984,8 +1067,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function setupMediaSession(title) {
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
-        title: title || 'ApexPlayer Pro Video',
-        artist: 'ApexPlayer Pro',
+        title: title || 'MC Player Pro Video',
+        artist: 'MC Player Pro',
         artwork: [{ src: 'icon.jpg', sizes: '512x512', type: 'image/jpeg' }]
       });
       navigator.mediaSession.setActionHandler('play', () => mainVideo.play());

@@ -1,21 +1,21 @@
 {
-  "name": "apexplayer-pro",
-  "version": "3.5.0",
-  "description": "ApexPlayer Pro - Secure Mobile Video Player for Realme & Android",
+  "name": "mcplayer-app",
+  "version": "4.0.0",
+  "description": "MC Player Pro - Full MX Player Clone Video Player for Android & Web",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [
+    "mc-player",
+    "mx-player-clone",
     "video-player",
-    "realme",
     "android",
-    "pwa",
-    "equalizer",
-    "gestures"
+    "gestures",
+    "equalizer"
   ],
-  "author": "ApexPlayer",
+  "author": "MC Player Team",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

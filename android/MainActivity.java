@@ -1,4 +1,4 @@
-package com.apexplayer.pro.realme;
+package com.mcplayer.app;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
 
         webView.setWebViewClient(new WebViewClient());
 
-        // Handle Default Video Player Intent when opened from Realme My Files
+        // Handle Default Video Player Intent when opened from File Explorer
         Intent intent = getIntent();
         String action = intent.getAction();
         Uri data = intent.getData();

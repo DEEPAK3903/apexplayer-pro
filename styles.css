@@ -1,29 +1,29 @@
 /* ==========================================================================
-   ApexPlayer Pro - Google UI & Detailed Media Explorer
-   Clean 3-Tab Layout: Home, Library, Settings.
+   MC Player Pro - MX Player Clone UI & Detailed Media Explorer
+   Color System: MX Deep Blue (#0084ff / #00a2ff) with Dark (#0a0e17) & Light (#ffffff).
    ========================================================================== */
 
 :root, body.theme-dark {
-  --bg-app: #0f0f0f;
-  --bg-surface: #1f1f1f;
-  --bg-card: #272727;
-  --bg-hover: #383838;
-  --text-main: #f1f3f4;
-  --text-secondary: #aaaaaa;
-  --primary-color: #1a73e8;
-  --primary-cyan: #00f2fe;
+  --bg-app: #0a0e17;
+  --bg-surface: #141a29;
+  --bg-card: #1c2438;
+  --bg-hover: #29344e;
+  --text-main: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --primary-color: #0084ff;
+  --primary-cyan: #00a2ff;
   --accent-neon: #00e676;
   --accent-gold: #ffb703;
   --border-color: rgba(255, 255, 255, 0.12);
-  --header-bg: rgba(15, 15, 15, 0.96);
-  --shadow-color: rgba(0, 0, 0, 0.5);
-  --nav-bg: #121212;
-  --nav-active: #ffffff;
+  --header-bg: rgba(10, 14, 23, 0.96);
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --nav-bg: #0d121f;
+  --nav-active: #0084ff;
   --pill-bg: rgba(255, 255, 255, 0.1);
-  --pill-active-bg: #ffffff;
-  --pill-active-text: #0f0f0f;
-  --search-bg: #222222;
-  --search-border: #333333;
+  --pill-active-bg: #0084ff;
+  --pill-active-text: #ffffff;
+  --search-bg: #141a29;
+  --search-border: #29344e;
 }
 
 body.theme-light {
@@ -31,22 +31,22 @@ body.theme-light {
   --bg-surface: #f8f9fa;
   --bg-card: #ffffff;
   --bg-hover: #e8eaed;
-  --text-main: #0f0f0f;
-  --text-secondary: #5f6368;
-  --primary-color: #1a73e8;
+  --text-main: #0f172a;
+  --text-secondary: #64748b;
+  --primary-color: #0084ff;
   --primary-cyan: #0b57d0;
   --accent-neon: #188038;
   --accent-gold: #f29900;
-  --border-color: #dadce0;
+  --border-color: #e2e8f0;
   --header-bg: rgba(255, 255, 255, 0.96);
   --shadow-color: rgba(0, 0, 0, 0.08);
   --nav-bg: #ffffff;
-  --nav-active: #1a73e8;
-  --pill-bg: #f1f3f4;
-  --pill-active-bg: #0f0f0f;
+  --nav-active: #0084ff;
+  --pill-bg: #f1f5f9;
+  --pill-active-bg: #0084ff;
   --pill-active-text: #ffffff;
-  --search-bg: #f1f3f4;
-  --search-border: #dadce0;
+  --search-bg: #f1f5f9;
+  --search-border: #cbd5e1;
 }
 
 * {
@@ -99,7 +99,7 @@ input[type="range"] {
   overflow: hidden;
 }
 
-/* APP HEADER */
+/* APP HEADER (MX Player Style) */
 .app-header {
   display: flex;
   align-items: center;
@@ -128,28 +128,28 @@ input[type="range"] {
 }
 
 .brand-logo-wrap {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #ff0000 0%, #ff4e50 100%);
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #0084ff 0%, #00d2ff 100%);
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 10px rgba(255, 0, 0, 0.3);
+  font-size: 0.95rem;
+  box-shadow: 0 3px 12px rgba(0, 132, 255, 0.4);
 }
 
 .brand-title {
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
 
 .brand-pro {
-  color: var(--primary-color);
-  font-size: 0.75rem;
-  background: rgba(26, 115, 232, 0.15);
+  color: #ffffff;
+  font-size: 0.7rem;
+  background: var(--primary-color);
   padding: 2px 6px;
   border-radius: 4px;
   text-transform: uppercase;
@@ -175,7 +175,7 @@ input[type="range"] {
 
 .search-box:focus-within {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.25);
 }
 
 .search-icon {
@@ -234,6 +234,7 @@ input[type="range"] {
   font-size: 0.82rem;
   font-weight: 700;
   gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
 }
 
 .header-icon-btn.highlight-btn:hover {
@@ -313,7 +314,7 @@ input[type="range"] {
 
 /* AUTO-SCAN BANNER CARD */
 .scan-banner-card {
-  background: linear-gradient(135deg, rgba(26, 115, 232, 0.12) 0%, rgba(0, 242, 254, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(0, 132, 255, 0.15) 0%, rgba(0, 210, 255, 0.1) 100%);
   border: 1px dashed var(--primary-color);
   border-radius: 16px;
   padding: 18px;
@@ -393,7 +394,7 @@ input[type="range"] {
 .btn-primary {
   background: var(--primary-color);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(26, 115, 232, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 132, 255, 0.35);
 }
 
 .btn-primary:hover {
@@ -436,12 +437,18 @@ input[type="range"] {
   font-weight: 600;
 }
 
-/* YOUTUBE VIDEO GRID (FULL DETAILS CARDS) */
+/* YOUTUBE / MX PLAYER VIDEO GRID */
 .youtube-video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding-bottom: 80px;
+}
+
+.youtube-video-grid.view-list-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 @media (max-width: 500px) {
@@ -480,6 +487,16 @@ input[type="range"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.thumb-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--primary-color);
+  width: 35%;
+  z-index: 5;
 }
 
 .duration-badge {
@@ -674,7 +691,7 @@ input[type="range"] {
 .folder-icon-box {
   width: 40px;
   height: 40px;
-  background: rgba(26, 115, 232, 0.15);
+  background: rgba(0, 132, 255, 0.15);
   color: var(--primary-color);
   border-radius: 10px;
   display: flex;
@@ -788,7 +805,7 @@ input[type="range"] {
   margin-bottom: 6px;
 }
 
-/* YOUTUBE FULL PLAYER OVERLAY */
+/* MX PLAYER FULL SCREEN OVERLAY */
 .player-overlay-view {
   position: fixed;
   top: 0;
@@ -819,6 +836,18 @@ input[type="range"] {
 
 .player-overlay-view video.aspect-stretch {
   object-fit: fill;
+}
+
+/* HW DECODER BADGE */
+.hw-decoder-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  background: rgba(0, 132, 255, 0.2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  width: fit-content;
+  margin-top: 2px;
 }
 
 /* GESTURE TOUCH ZONE */
@@ -875,7 +904,7 @@ input[type="range"] {
   bottom: 0;
   width: 100%;
   height: 70%;
-  background: var(--primary-cyan);
+  background: var(--primary-color);
 }
 
 .hud-val {
@@ -923,7 +952,7 @@ input[type="range"] {
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   padding: 6px 16px;
   border-radius: 8px;
   z-index: 915;
@@ -958,7 +987,6 @@ input[type="range"] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 50%;
 }
 
 .player-top-actions {
@@ -1004,7 +1032,7 @@ input[type="range"] {
 
 .progress-fill {
   height: 4px;
-  background: red;
+  background: var(--primary-color);
   border-radius: 2px;
   position: relative;
   width: 0%;
@@ -1016,8 +1044,9 @@ input[type="range"] {
   top: -4px;
   width: 12px;
   height: 12px;
-  background: red;
+  background: var(--primary-color);
   border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0, 132, 255, 0.8);
 }
 
 .player-controls-row {
@@ -1033,16 +1062,17 @@ input[type="range"] {
 }
 
 .play-btn {
-  background: #ffffff;
-  color: #000000;
+  background: var(--primary-color);
+  color: #ffffff;
   border: none;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(0, 132, 255, 0.4);
 }
 
 .time-display {
@@ -1205,7 +1235,6 @@ input[type="range"] {
   display: none;
   align-items: flex-end;
   justify-content: center;
-
 }
 
 .modal-backdrop.open {

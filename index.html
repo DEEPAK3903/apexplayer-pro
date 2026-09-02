@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>ApexPlayer Pro - Mobile Video Player</title>
-  <meta name="description" content="YouTube-style secure mobile video player for Android & Realme with local media scanner, Google UI Light/Dark mode, and detailed file manager.">
-  <meta name="theme-color" content="#1a73e8">
+  <title>MC Player Pro - Full MX Player Clone</title>
+  <meta name="description" content="MC Player Pro - Ultra-powerful MX Player clone with gesture controls, HW+ decoder UI, local media scanner, Google UI Light/Dark mode, and 5-band equalizer.">
+  <meta name="theme-color" content="#0084ff">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/jpeg" href="icon.jpg">
   
@@ -19,17 +19,17 @@
 </head>
 <body class="theme-dark">
 
-  <!-- FULL SCREEN APP ROOT CONTAINER -->
+  <!-- FULL SCREEN MC PLAYER ROOT CONTAINER -->
   <div id="app-root">
 
-    <!-- APP TOP HEADER BAR (YouTube / Google UI Style) -->
+    <!-- APP TOP HEADER BAR (MX Player Style) -->
     <header class="app-header">
       <div class="header-left">
         <a href="#" class="brand" id="brandLink">
           <div class="brand-logo-wrap">
             <i class="fa-solid fa-play"></i>
           </div>
-          <span class="brand-title">ApexPlayer <span class="brand-pro">Pro</span></span>
+          <span class="brand-title">MC Player <span class="brand-pro">PRO</span></span>
         </a>
       </div>
 
@@ -37,7 +37,7 @@
       <div class="header-center">
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="globalSearchInput" placeholder="Search by name, path, extension (.mp4, .mkv)..." autocomplete="off">
+          <input type="text" id="globalSearchInput" placeholder="Search MC Player videos or folders..." autocomplete="off">
           <button class="clear-search-btn" id="btnClearSearch" style="display: none;">
             <i class="fa-solid fa-xmark"></i>
           </button>
@@ -45,19 +45,24 @@
       </div>
 
       <div class="header-right">
+        <!-- Grid / Detailed List View Toggle -->
+        <button class="header-icon-btn" id="btnToggleViewMode" title="Toggle Grid / List View">
+          <i class="fa-solid fa-table-cells-large" id="viewModeIcon"></i>
+        </button>
+
         <!-- 1-Click Scan Local Media Folder -->
-        <button class="header-icon-btn highlight-btn" id="btnScanFolderTop" title="Scan Local Video Folder">
+        <button class="header-icon-btn highlight-btn" id="btnScanFolderTop" title="Scan Directory">
           <i class="fa-solid fa-folder-plus"></i>
           <span class="btn-text-mobile">Scan Folder</span>
         </button>
 
         <!-- Theme Toggle (Google White / Dark Mode) -->
-        <button class="header-icon-btn" id="btnThemeToggle" title="Toggle Light / Dark Mode">
+        <button class="header-icon-btn" id="btnThemeToggle" title="Toggle Theme">
           <i class="fa-solid fa-sun" id="themeIcon"></i>
         </button>
 
-        <!-- Security & Vault Status -->
-        <button class="header-icon-btn" id="btnSecurityModal" title="Security Certification">
+        <!-- Security Status -->
+        <button class="header-icon-btn" id="btnSecurityModal" title="Security Status">
           <i class="fa-solid fa-shield-halved" style="color: var(--accent-neon, #00e676);"></i>
         </button>
       </div>
@@ -66,13 +71,13 @@
     <!-- MAIN VIEWPORT CONTAINER -->
     <main class="app-main-viewport">
 
-      <!-- VIEW 1: HOME / YOUTUBE VIDEO FEED -->
+      <!-- VIEW 1: HOME / MC PLAYER MEDIA MANAGER -->
       <section class="app-view active-view" id="viewHome">
         
         <!-- Category Filter Pills Bar -->
         <div class="category-pills-bar">
-          <button class="pill-item active" data-category="all">All Files</button>
-          <button class="pill-item" data-category="scanned"><i class="fa-solid fa-hard-drive"></i> Local Scanned Media</button>
+          <button class="pill-item active" data-category="all">All Media</button>
+          <button class="pill-item" data-category="scanned"><i class="fa-solid fa-hard-drive"></i> Laptop Scanned Files</button>
           <button class="pill-item" data-category="4k">4K UHD</button>
           <button class="pill-item" data-category="movies">Movies & Shows</button>
           <button class="pill-item" data-category="recent">Recently Played</button>
@@ -85,8 +90,8 @@
               <i class="fa-solid fa-folder-tree"></i>
             </div>
             <div class="banner-text">
-              <h3>Auto-Scan Device Video Folder & Subfolders</h3>
-              <p>Select your video directory (Downloads, DCIM, Movies) once to recursively scan all subfolders and display all videos with full file details.</p>
+              <h3>Auto-Scan Laptop Video Folders & Subfolders</h3>
+              <p>Select your video directory (Downloads, DCIM, Movies) once to recursively scan all subfolders and display all videos with MX Player thumbnails and file details.</p>
             </div>
             <div class="banner-actions">
               <button class="btn btn-primary" id="btnScanFolderBanner">
@@ -104,24 +109,24 @@
 
         <!-- Video Feed Section Header -->
         <div class="section-title-row">
-          <h2 id="feedTitle"><i class="fa-solid fa-film" style="color: var(--primary-color);"></i> All Video Files</h2>
+          <h2 id="feedTitle"><i class="fa-solid fa-film" style="color: var(--primary-color);"></i> All Media Files</h2>
           <span class="video-count-badge" id="videoCountBadge">0 Files</span>
         </div>
 
-        <!-- YouTube Video Grid with Full File Details -->
+        <!-- MX Player Video Grid & List Container -->
         <div class="youtube-video-grid" id="videoGrid">
-          <!-- Video Cards populated dynamically with full details -->
+          <!-- Video Cards populated dynamically -->
         </div>
 
       </section>
 
-      <!-- VIEW 2: FOLDER & DEVICE LIBRARY VIEW (Full Details List) -->
+      <!-- VIEW 2: DEVICE LIBRARY VIEW -->
       <section class="app-view" id="viewLibrary">
         <div class="view-header">
-          <h2><i class="fa-solid fa-folder-tree"></i> Device Library & Detailed Files</h2>
+          <h2><i class="fa-solid fa-folder-tree"></i> MC Player Folder Explorer</h2>
           <div style="display: flex; gap: 8px;">
             <button class="btn btn-primary" id="btnScanLibraryTop">
-              <i class="fa-solid fa-folder-plus"></i> Scan Directory
+              <i class="fa-solid fa-folder-plus"></i> Scan Folder
             </button>
             <button class="btn btn-secondary" id="btnRefreshLibrary">
               <i class="fa-solid fa-arrows-rotate"></i> Refresh
@@ -162,24 +167,24 @@
         </div>
 
         <div class="section-title-row" style="margin-top: 2rem;">
-          <h3>All Media Files Detailed View</h3>
+          <h3>Detailed Media Explorer</h3>
         </div>
 
         <div class="video-list-linear" id="libraryVideoList">
-          <!-- Populated dynamically with complete file details -->
+          <!-- Populated dynamically -->
         </div>
       </section>
 
-      <!-- VIEW 3: SETTINGS & SECURITY VIEW -->
+      <!-- VIEW 3: SETTINGS VIEW -->
       <section class="app-view" id="viewSettings">
         <div class="settings-container">
-          <h2><i class="fa-solid fa-gear"></i> App Settings & Storage</h2>
+          <h2><i class="fa-solid fa-gear"></i> MC Player Settings</h2>
 
           <div class="settings-group">
             <h3>Appearance & Themes</h3>
             <div class="setting-row">
               <div class="setting-text">
-                <span class="setting-title">Google UI Theme Mode</span>
+                <span class="setting-title">Google / MX UI Theme</span>
                 <span class="setting-desc">Switch between Clean Light Mode and OLED Dark Mode</span>
               </div>
               <div class="theme-toggle-switch">
@@ -190,34 +195,37 @@
           </div>
 
           <div class="settings-group">
-            <h3>Storage & Library Indexing</h3>
+            <h3>Playback & Hardware Decoder</h3>
             <div class="setting-row">
               <div class="setting-text">
-                <span class="setting-title">Persistent Media Index</span>
-                <span class="setting-desc">Automatically remember scanned local video files on device</span>
+                <span class="setting-title">HW+ Hardware Acceleration</span>
+                <span class="setting-desc">Enable smooth 4K 120fps hardware decoding engine</span>
               </div>
-              <input type="checkbox" class="toggle-switch" id="toggleAutoIndex" checked>
+              <input type="checkbox" class="toggle-switch" id="toggleHWAcc" checked>
             </div>
             <div class="setting-row">
               <div class="setting-text">
-                <span class="setting-title">Clear Saved Library Index</span>
+                <span class="setting-title">Background Audio Playback</span>
+                <span class="setting-desc">Continue playing audio when app is minimized</span>
+              </div>
+              <input type="checkbox" class="toggle-switch" id="toggleBgPlay" checked>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3>Storage & Library Cache</h3>
+            <div class="setting-row">
+              <div class="setting-text">
+                <span class="setting-title">Clear Scanned Library Cache</span>
                 <span class="setting-desc">Remove all indexed file records from browser storage</span>
               </div>
               <button class="btn btn-secondary" id="btnClearCache">Clear Library</button>
             </div>
           </div>
-
-          <div class="settings-group">
-            <h3>Security & Virus Verification</h3>
-            <div class="security-card-box">
-              <div class="sec-status-badge"><i class="fa-solid fa-shield-check"></i> 100% Clean Security Report</div>
-              <p>Operates strictly in sandboxed Scoped Storage. Zero data collection, zero network tracking, 0/72 VirusTotal detection score.</p>
-            </div>
-          </div>
         </div>
       </section>
 
-      <!-- YOUTUBE VIDEO PLAYER OVERLAY VIEW -->
+      <!-- FULL MX PLAYER VIDEO PLAYER OVERLAY VIEW -->
       <div class="player-overlay-view" id="playerOverlay">
         
         <video id="mainVideo" poster="poster.jpg" playsinline crossorigin="anonymous">
@@ -229,7 +237,7 @@
           <span class="subtitle-text" id="subtitleText"></span>
         </div>
 
-        <!-- TOUCH GESTURE INTERACTION ZONE -->
+        <!-- MX PLAYER TOUCH GESTURE INTERACTION ZONE -->
         <div class="gesture-zone" id="gestureZone">
           <!-- Left Half: Brightness Swipe -->
           <div class="zone-left">
@@ -264,14 +272,20 @@
           <span>+10s</span>
         </div>
 
-        <!-- Player Top Bar Controls -->
+        <!-- MX PLAYER TOP CONTROLS BAR -->
         <div class="player-top-bar" id="playerTopBar">
-          <button class="player-icon-btn" id="btnMinimizePlayer" title="Minimize to Mini-Player">
-            <i class="fa-solid fa-chevron-down"></i>
+          <button class="player-icon-btn" id="btnMinimizePlayer" title="Back / Minimize">
+            <i class="fa-solid fa-arrow-left"></i>
           </button>
-          <span class="video-title-label" id="videoTitleLabel">Cyberpunk City 4K.mp4</span>
+          <div style="display: flex; flex-direction: column; overflow: hidden; max-width: 45%;">
+            <span class="video-title-label" id="videoTitleLabel">Cyberpunk City 4K.mp4</span>
+            <span class="hw-decoder-badge">HW+ DECODER</span>
+          </div>
           
           <div class="player-top-actions">
+            <button class="player-icon-btn" id="btnOrientation" title="Screen Rotation">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </button>
             <button class="player-icon-btn" id="btnAspectRatio" title="Aspect Ratio">
               <i class="fa-solid fa-crop-simple"></i>
             </button>
@@ -287,7 +301,7 @@
           </div>
         </div>
 
-        <!-- Player Bottom Bar Controls -->
+        <!-- MX PLAYER BOTTOM CONTROLS BAR -->
         <div class="player-bottom-bar" id="playerBottomBar">
           <!-- Seek Bar Track -->
           <div class="progress-bar-container" id="seekBarTrack">
@@ -298,24 +312,35 @@
 
           <div class="player-controls-row">
             <div class="left-controls">
+              <button class="player-icon-btn" id="btnPrevVideo" title="Previous Video"><i class="fa-solid fa-backward-step"></i></button>
+              <button class="player-icon-btn" id="btnSkipBack" title="-10s"><i class="fa-solid fa-rotate-left"></i></button>
+              
               <button class="play-btn" id="btnPlayPause">
                 <i class="fa-solid fa-play" id="playIcon"></i>
               </button>
-              <button class="player-icon-btn" id="btnMute">
-                <i class="fa-solid fa-volume-high" id="muteIcon"></i>
-              </button>
+              
+              <button class="player-icon-btn" id="btnSkipForward" title="+10s"><i class="fa-solid fa-rotate-right"></i></button>
+              <button class="player-icon-btn" id="btnNextVideo" title="Next Video"><i class="fa-solid fa-forward-step"></i></button>
+              
               <div class="time-display">
                 <span id="currentTimeText">00:00</span> / <span id="durationText">00:00</span>
               </div>
             </div>
 
             <div class="right-controls">
+              <button class="player-icon-btn" id="btnMute">
+                <i class="fa-solid fa-volume-high" id="muteIcon"></i>
+              </button>
+
               <select id="playbackSpeedSelect" class="speed-select" title="Speed">
+                <option value="0.25">0.25x</option>
                 <option value="0.5">0.5x</option>
+                <option value="0.75">0.75x</option>
                 <option value="1.0" selected>1.0x</option>
                 <option value="1.25">1.25x</option>
                 <option value="1.5">1.5x</option>
                 <option value="2.0">2.0x</option>
+                <option value="3.0">3.0x</option>
               </select>
 
               <label for="subFileInput" class="player-icon-btn" title="Load Subtitles (.srt/.vtt)">
@@ -329,7 +354,7 @@
         <!-- Lock Screen Overlay -->
         <div class="lock-screen-overlay" id="lockOverlay">
           <button class="unlock-pill-btn" id="btnUnlockPlayer">
-            <i class="fa-solid fa-lock-open"></i> Tap to Unlock Controls
+            <i class="fa-solid fa-lock-open"></i> Tap to Unlock Screen Controls
           </button>
         </div>
 
@@ -337,14 +362,14 @@
 
     </main>
 
-    <!-- FLOATING MINI-PLAYER BAR (YouTube App Style) -->
+    <!-- FLOATING MINI-PLAYER BAR (MX Player Style) -->
     <div class="mini-player-bar" id="miniPlayerBar" style="display: none;">
       <div class="mini-thumb-wrapper">
         <video id="miniPreviewVideo" muted playsinline></video>
       </div>
       <div class="mini-info">
         <span class="mini-title" id="miniTitle">Video Title</span>
-        <span class="mini-sub">Playing in Background</span>
+        <span class="mini-sub">MC Player Background Playback</span>
       </div>
       <div class="mini-actions">
         <button class="mini-btn" id="btnMiniPlayPause"><i class="fa-solid fa-pause" id="miniPlayIcon"></i></button>
@@ -371,12 +396,12 @@
 
   </div>
 
-  <!-- EQUALIZER MODAL SHEET (EASY TO EXIT WITH PROMINENT X & CLOSE BUTTON) -->
+  <!-- EQUALIZER MODAL SHEET (PROMINENT EXIT BUTTONS) -->
   <div class="modal-backdrop" id="eqModal">
     <div class="sheet-content">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <span class="sheet-title"><i class="fa-solid fa-sliders" style="color: var(--primary-color);"></i> 5-Band Equalizer & Bass Booster</span>
+        <span class="sheet-title"><i class="fa-solid fa-sliders" style="color: var(--primary-color);"></i> 5-Band Equalizer & Sound Booster</span>
         <button class="close-eq-btn" id="btnCloseEq" title="Close Equalizer">
           <i class="fa-solid fa-xmark"></i> Close X
         </button>
@@ -438,7 +463,7 @@
         <button class="close-eq-btn" id="btnCloseSecurityModal"><i class="fa-solid fa-xmark"></i> Close</button>
       </div>
       <div class="dialog-body">
-        <p><strong>Package Name:</strong> com.apexplayer.pro.realme</p>
+        <p><strong>Package Name:</strong> com.mcplayer.app</p>
         <p><strong>VirusTotal Audit:</strong> 0/72 Clean (No Malware Detected)</p>
         <p><strong>SHA-256 Hash:</strong> <code>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</code></p>
         <p><strong>Storage Privacy:</strong> 100% Offline Scoped Storage mode without internet tracking or external data transmission.</p>
