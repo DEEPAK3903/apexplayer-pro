@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: apexplayer-pro
+    name: mcplayer-pro
     env: node
     plan: free
     buildCommand: npm install
