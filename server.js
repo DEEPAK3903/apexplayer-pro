@@ -39,5 +39,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`ApexPlayer Pro Dev Server running at http://localhost:${PORT}`);
+  console.log(`MC Player Pro Server running on port ${PORT}`);
 });
