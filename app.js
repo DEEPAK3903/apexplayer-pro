@@ -1093,6 +1093,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Register Service Worker & Clear Stale Caches
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js?v=4.0.0').then(reg => {
+      reg.update();
+    }).catch(err => console.log('SW registration notice:', err));
+  }
+
   // --- INITIALIZE APP ---
   initTheme();
   loadAllVideos();
